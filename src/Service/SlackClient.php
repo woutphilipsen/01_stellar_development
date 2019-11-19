@@ -23,7 +23,7 @@ class SlackClient
 
         $slackMessage = $this->slack->createMessage()
             ->from($from)
-            ->withIcon(':ghost:')
+            ->withIcon(':heart:')
             ->setText($message)
         ;
 
