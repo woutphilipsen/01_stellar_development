@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Nexy\Slack\Client;
 use App\Service\MarkdownHelper;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -14,6 +15,16 @@ use Twig\Environment;
 class ArticleController extends AbstractController
 {
     /**
+     * Currently unused: just showing a controller with a constructor
+     */
+    private $isDebug;
+
+    public function __construct(bool $isDebug)
+    {
+        $this->isDebug= $isDebug;
+    }
+
+    /**
      * @Route("/", name="app_homepage")
      */
     public function homepage()
@@ -24,9 +35,19 @@ class ArticleController extends AbstractController
     /**
      * @Route("/news/{slug}", name="article_show")
      */
-    public function show($slug, MarkdownHelper $markdownHelper)
+    public function show($slug, MarkdownHelper $markdownHelper, Client $slack)
     {
+        if ($slug == 'Khaaan')
+        {
+            $message = $slack->createMessage()
+                ->from('Khan')
+                ->withIcon(':ghost:')
+                ->setText('Ah, Kirk, my old friend...')
+            ;
 
+            $slack->sendMessage($message);
+        }
+        
         $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
             'Woohoo! I\'m going on an all-asteroid diet!',
